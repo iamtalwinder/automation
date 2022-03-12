@@ -1,0 +1,90 @@
+{
+  "name": "automation",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
+  "description": "Automation Starter Template",
+  "scripts": {
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
+    "test": "mocha --debug-brk -r ts-node/register --config .mocharc.dist.json --file ./tests/setup-env.ts -reporter mochawesome || true"
+  },
+  "main": "tslint.json",
+  "files": [
+    "package.json",
+    "README.md",
+    "tslint.json"
+  ],
+  "dependencies": {
+    "@nestjs/testing": "^7.6.3",
+    "@types/amqp-connection-manager": "^2.0.10",
+    "@types/amqplib": "^0.5.16",
+    "@types/chai": "^4.2.3",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/lodash": "^4.14.165",
+    "@types/mocha": "^7.0.1",
+    "@types/node": "^12.20.0",
+    "@types/selenium-webdriver": "^4.0.6",
+    "@types/sinon": "^7.5.2",
+    "@types/sinon-chai": "^3.2.3",
+    "@types/sinon-mongoose": "^1.3.11",
+    "@types/superagent": "^4.1.7",
+    "@types/uuid": "^8.3.0",
+    "@types/yargs": "^15.0.4",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-match-pattern": "^1.1.0",
+    "chai-subset": "^1.6.0",
+    "chalk": "^3.0.0",
+    "chromedriver": "^90.0.1",
+    "dotenv": "^16.0.0",
+    "edgedriver": "^4.17134.1",
+    "geckodriver": "^1.19.1",
+    "iedriver": "^3.150.1",
+    "lint-staged": "^10.0.8",
+    "mocha": "^7.1.0",
+    "nyc": "^15.1.0",
+    "reflect-metadata": "^0.1.13",
+    "selenium-webdriver": "^4.0.0-alpha.5",
+    "sinon": "^7.5.0",
+    "sinon-chai": "^3.5.0",
+    "sinon-mongoose": "^2.3.0",
+    "slugify": "^1.3.6",
+    "superagent": "^5.2.2",
+    "supertest": "^5.0.0-0",
+    "ts-loader": "^4.5.0",
+    "ts-node": "^8.5.2",
+    "tsc-watch": "^4.1.0",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-sonarts": "^1.9.0",
+    "typescript": "^3.9.7",
+    "wait-on": "^3.2.0"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "mocha": {
+    "package": "./package.json",
+    "diff": true,
+    "slow": 75,
+    "timeout": 2000,
+    "ui": "bdd"
+  },
+  "devDependencies": {
+    "mochawesome": "^6.2.2"
+  }
+}
