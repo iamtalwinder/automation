@@ -11,8 +11,10 @@ if (
 }
 
 export const environment: any = {
-  siteUrl: env.SITE_URL,
   browser: env.SELENIUM_BROWSER,
+  defaultUserEmail: env.DEFAULT_USER_EMAIL,
+  defaultUserPass: env.DEFAULT_USER_PASS,
+  siteUrl: env.SITE_URL,
 };
 
 export const businesses: any = {
