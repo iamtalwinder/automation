@@ -1,4 +1,0 @@
-include:
-  - project: 'infra/ci-config'
-    ref: 'master'
-    file: '/kits/dev-kit.yml'
