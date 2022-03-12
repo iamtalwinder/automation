@@ -1,0 +1,7 @@
+{
+  "_comment": "This is sample file. Please copy as .mocharc.dist.json",
+  "spec": [
+    "./tests/builder/media.spec.ts" 
+  ],
+  "retries": 0
+}
