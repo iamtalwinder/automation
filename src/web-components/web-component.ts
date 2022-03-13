@@ -1,6 +1,6 @@
 import { By, until, WebElement } from 'selenium-webdriver';
-import { AbstractWebComponent } from "./abstract-web-component";
-import { environment } from "../environments";
+import { AbstractWebComponent } from './abstract-web-component';
+import { environment } from '../environments';
 
 export class WebComponent extends AbstractWebComponent {
 

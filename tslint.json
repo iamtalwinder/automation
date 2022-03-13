@@ -90,6 +90,13 @@
       "check-type",
       "check-type-operator",
       "check-typecast"
+    ],
+    "ban": [
+      false,
+      {"name": "xit", "message": "No commented tests allowed"},
+      {"name": "xdescribe", "message": "No commented tests allowed"},
+      {"name": ["it", "only"], "message": "Don't focus tests"},
+      {"name": ["describe", "only"], "message": "Don't focus tests"}
     ]
   },
   "rulesDirectory": []

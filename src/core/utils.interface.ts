@@ -3,6 +3,6 @@ export interface CSSMatrixOject {
   skewY: string;
   skewX: string;
   scaleY: string;
-  translateX:string;
+  translateX: string;
   translateY: string;
 }

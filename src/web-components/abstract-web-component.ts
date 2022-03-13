@@ -1,10 +1,10 @@
 import { By, IRectangle, Origin, ThenableWebDriver, until, WebElement, ILocation } from 'selenium-webdriver';
-import { WebComponentInterface } from "./web-component.interface";
-import { Browser } from "../core";
-import * as chalk from "chalk";
+import { WebComponentInterface } from './web-component.interface';
+import { Browser } from '../core';
+import * as chalk from 'chalk';
 import { IDirection, Key, Button } from 'selenium-webdriver/lib/input';
 import { environment, attributes } from '../environments';
-import { WebComponent } from '.';
+import { Logger } from '../services';
 
 export abstract class AbstractWebComponent implements WebComponentInterface {
   protected driver: ThenableWebDriver;
@@ -23,7 +23,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       await this.browser.wait(async () => element.isDisplayed());
 
       return element.click();
-    }, async (element: WebElement) => {
+    },                  async (element: WebElement) => {
       return this.driver.executeScript('arguments[0].click();', element);
     });
   }
@@ -59,7 +59,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       await this.browser.wait(async () => element.isDisplayed());
       await this.driver.actions().click(element).perform();
       await this.browser.wait(until.stalenessOf(element), waitTime);
-    }, async (element: WebElement) => {
+    },                  async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());
       await this.driver.executeScript('arguments[0].click();', element);
       await this.browser.wait(until.stalenessOf(element), waitTime);
@@ -69,11 +69,9 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   public async clickOfStaleness(waitTime: number = 3000): Promise<void> {
     return this.execute('CLICK OF STALENESS', async (element: WebElement) => {
       await this.browser.wait(until.stalenessOf(element), waitTime);
-      // await this.browser.wait(async () => element.isDisplayed());
       await this.driver.actions().click(element).perform();
-    }, async (element: WebElement) => {
+    },                  async (element: WebElement) => {
       await this.browser.wait(until.stalenessOf(element), waitTime);
-      // await this.browser.wait(async () => element.isDisplayed());
       await this.driver.executeScript('arguments[0].click();', element);
     });
   }
@@ -133,7 +131,12 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     );
   }
 
-  public async dragAndDropWithOffset(target: AbstractWebComponent, offsetX?: number, offsetY?: number, relative: boolean = true): Promise<void> {
+  public async dragAndDropWithOffset(
+    target: AbstractWebComponent, 
+    offsetX?: number, 
+    offsetY?: number, 
+    relative: boolean = true,
+  ): Promise<void> {
     await this.getPosition();
     const targetPosition: IRectangle = await target.getPosition();
     const x: number = targetPosition.x;
@@ -155,29 +158,10 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     );
   }
 
-  public async moveWithOffset(x: number, y: number, offsetX: number, offsetY: number, relative: boolean = true): Promise<void> {
-    await this.getPosition();
-
-    return this.execute(
-      `MOVE | (${chalk.blueBright(x)},  ${chalk.blueBright(y)}, ${chalk.blueBright(relative ? 'relative' : 'absolute')})`,
-      async (element: WebElement) => {
-        await this.browser.wait(async () => element.isDisplayed());
-
-        return this.browser.getDriver().actions()
-          .move({ origin: element })
-          .move(this.getLocation(offsetX, offsetY, relative))
-          .press()
-          .move({ origin: relative ? Origin.POINTER : Origin.VIEWPORT, x, y })
-          .release()
-          .perform();
-      },
-    );
-  }
-
-
   public async clickWithOffset(x: number, y: number, relative: boolean = true): Promise<void> {
     await this.getPosition();
 
+    // tslint:disable: max-line-length
     return this.execute(
       `CLICK WITH OFFSETT | (${chalk.blueBright(x)},  ${chalk.blueBright(y)}, ${chalk.blueBright(relative ? 'relative' : 'absolute')})`,
       async (element: WebElement) => {
@@ -231,7 +215,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   }
 
   public getLocation(x: number, y: number, relative: boolean): IDirection {
-    return { origin: relative ? Origin.POINTER : Origin.VIEWPORT, x, y }
+    return { origin: relative ? Origin.POINTER : Origin.VIEWPORT, x, y };
   }
 
   public async clickWithControlKey(key: string): Promise<void> {
@@ -247,7 +231,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       await this.browser.wait(async () => element.isDisplayed());
 
       await element.clear();
-    }, async (element: WebElement) => {
+    },                  async (element: WebElement) => {
       await this.driver.executeScript('arguments[0].clear();', element);
     });
   }
@@ -274,7 +258,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
 
   public async selectText(): Promise<void> {
     let key: string;
-    if ((await this.browser.getUserAgent()).includes('Macintosh;')){
+    if ((await this.browser.getUserAgent()).includes('Macintosh;')) {
       key = Key.COMMAND;
     } else {
       key = Key.CONTROL;
@@ -286,7 +270,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
         .keyDown(key)
         .sendKeys('a')
         .keyUp(key)
-        .perform()
+        .perform();
     });
   }
 
@@ -296,18 +280,6 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     await this.selectText();
 
     return this.execute(`SET TEXT CONTENT`, async (element: WebElement) => {
-
-      return this.browser.getDriver().actions()
-        .sendKeys(newValue)
-        .perform();
-    });
-  }
-
-  public async setText(newValue: string): Promise<void> {
-    await this.scrollIntoView();
-    await this.doubleClick();
-
-    return this.execute(`SET TEXT`, async (element: WebElement) => {
 
       return this.browser.getDriver().actions()
         .sendKeys(newValue)
@@ -381,9 +353,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   }
 
   public async getTextTag(): Promise<string> {
-    const homeUrl: string = await this.driver.executeScript(`return document.querySelector("${this.locator.value}").text;`);
-
-    return homeUrl;
+    return this.driver.executeScript(`return document.querySelector("${this.locator.value}").text;`);
   }
 
   public async getPosition(): Promise<IRectangle> {
@@ -432,7 +402,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       } else {
         return false;
       }
-    }, implicitTimeout);
+    },                      implicitTimeout);
   }
 
   public async waitUntilNotLocated(implicitTimeout: number = environment.timeout): Promise<void> {
@@ -441,7 +411,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
 
   public async countElements(): Promise<number> {
     const elements: WebElement[] = await this.getElements();
-    console.warn(`COUNT ELEMENTS |`, chalk.gray(this.locator.toString()), '|', chalk.greenBright(elements.length));
+    Logger.warn(`COUNT ELEMENTS |`, chalk.gray(this.locator.toString()), '|', chalk.greenBright(elements.length));
 
     return elements.length;
   }
@@ -464,7 +434,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   protected async execute(
     actionName: string,
     action: (element: WebElement) => Promise<any>,
-    scriptAction: (element: WebElement) => Promise<any> | (() => {}) = null,
+    scriptAction: (element: WebElement) => Promise<any> | (() => { }) = null,
   ): Promise<any> {
     const locator: string = this.locator.value;
 
@@ -473,14 +443,14 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       const result: any = await action(element);
 
       if (result !== null && result !== undefined) {
-        console.warn(`${actionName} |`, chalk.gray(this.locator.toString()), '|', chalk.greenBright(JSON.stringify(result)));
+        Logger.warn(`${actionName} |`, chalk.gray(this.locator.toString()), '|', chalk.greenBright(JSON.stringify(result)));
       } else {
-        console.warn(`${actionName} |`, chalk.gray(this.locator.toString()));
+        Logger.warn(`${actionName} |`, chalk.gray(this.locator.toString()));
       }
 
       return result;
     } catch (e) {
-      console.warn(`${actionName} |`, chalk.gray(this.locator.toString()));
+      Logger.warn(`${actionName} |`, chalk.gray(this.locator.toString()));
 
       if (e.name === 'ElementClickInterceptedError' || e.name === 'ElementNotInteractableError') {
 
@@ -492,13 +462,13 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
 
       if (e.name === 'StaleElementReferenceError' || e.name === 'InvalidElementStateError') {
         await this.driver.sleep(100);
-        console.warn(chalk.gray(e.name), chalk.gray('Repeat after 100ms'));
+        Logger.warn(chalk.gray(e.name), chalk.gray('Repeat after 100ms'));
 
         return this.execute(actionName, action, scriptAction);
       }
 
-      console.warn(chalk.redBright(e.name));
-      console.warn(chalk.redBright(e.message));
+      Logger.warn(chalk.redBright(e.name));
+      Logger.warn(chalk.redBright(e.message));
       await this.browser.takeScreenshot(actionName);
 
       throw e;

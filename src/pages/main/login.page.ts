@@ -5,13 +5,13 @@ import { WebComponent } from '../../web-components';
 import { By } from 'selenium-webdriver';
 
 export class LoginPage extends AbstractPage {
-  @find(By.css("form mat-form-field:nth-child(1) input"))
+  @find(By.css('form mat-form-field:nth-child(1) input'))
   public Email: WebComponent;
 
   @find(By.css("form mat-form-field input[type='password']"))
   public Password: WebComponent;
 
-  @find(By.css("form button"))
+  @find(By.css('form button'))
   public Login: WebComponent;
 
   constructor(browser: Browser) {

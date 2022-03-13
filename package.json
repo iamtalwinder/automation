@@ -5,6 +5,7 @@
   "description": "Automation Starter Template",
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json",
+    "lint:fix": "tslint --fix -c tslint.json -p tsconfig.json",
     "build": "tsc -p tsconfig.json",
     "test": "mocha --debug-brk -r ts-node/register --config .mocharc.dist.json --file ./tests/setup-env.ts -reporter mochawesome || true"
   },

@@ -1,16 +1,24 @@
-import * as chalk from "chalk";
+import * as chalk from 'chalk';
 import 'chromedriver';
 import 'edgedriver';
-import { promises, writeFile } from "fs";
+import { promises, writeFile } from 'fs';
 import 'geckodriver';
 import 'iedriver';
-import { resolve } from "path";
-import { Builder, By, Key, Condition, IRectangle, IWebDriverOptionsCookie, ThenableWebDriver } from 'selenium-webdriver';
-import { Options } from "selenium-webdriver/chrome";
-import slugify from "slugify";
+import { resolve } from 'path';
+import { 
+  Builder, 
+  By, 
+  Key, 
+  Condition, 
+  IRectangle, 
+  IWebDriverOptionsCookie, 
+  ThenableWebDriver,
+} from 'selenium-webdriver';
+import { Options } from 'selenium-webdriver/chrome';
+import slugify from 'slugify';
 import { businesses, environment } from '../environments';
-import { ShadowWebComponent, WebComponent } from "../web-components";
-
+import { Logger } from '../services';
+import { ShadowWebComponent, WebComponent } from '../web-components';
 
 export class Browser {
   private readonly driver: ThenableWebDriver;
@@ -18,14 +26,14 @@ export class Browser {
 
   public constructor() {
     this.driver = Browser.createBrowser(environment.browser);
-    this.storedUrls = new Map<string, string>()
+    this.storedUrls = new Map<string, string>();
   }
 
   public async rememberCurrentUrl(key: string): Promise<void> {
     const url: string = await this.driver.getCurrentUrl();
 
     this.storedUrls.set(key, url);
-    console.warn(chalk.cyan(url));
+    Logger.warn(chalk.cyan(url));
   }
 
   public async clearStoredUrls(): Promise<void> {
@@ -83,69 +91,72 @@ export class Browser {
     await this.driver.manage().deleteAllCookies();
   }
 
-  public async wait<T>(condition: Condition<T> | (() => {}), implicitTimeout: number = environment.timeout): Promise<T> {
+  public async wait<T>(
+    condition: Condition<T> | (() => { }), 
+    implicitTimeout: number = environment.timeout,
+  ): Promise<T> {
     return this.driver
       .wait(condition, implicitTimeout)
       .catch(async (error: Error) => {
-        if (typeof condition === "function") {
-          error.message = error.message + ' | ' + condition.toString().replace(/ {2}/g, "").replace(/\n/g, " ");
+        if (typeof condition === 'function') {
+          error.message = error.message + ' | ' + condition.toString().replace(/ {2}/g, '').replace(/\n/g, ' ');
         }
 
         if (implicitTimeout >= environment.timeout) {
-          console.warn(chalk.redBright(error.message));
+          Logger.warn(chalk.redBright(error.message));
 
           await this.takeScreenshot('wait');
 
           throw error;
         }
 
-        console.warn(chalk.gray(error.message));
+        Logger.warn(chalk.gray(error.message));
 
         return null;
       });
   }
 
-  public async waitAll<T>(condition: Condition<T> | (() => {}), implicitTimeout: number = environment.timeout): Promise<T> {
+  public async waitAll<T>(
+    condition: Condition<T> | (() => { }), 
+    implicitTimeout: number = environment.timeout,
+  ): Promise<T> {
     return this.driver
       .wait(condition, implicitTimeout)
       .catch(async (error: Error) => {
-        if (typeof condition === "function") {
-          error.message = error.message + ' | ' + condition.toString().replace(/ {2}/g, "").replace(/\n/g, " ");
+        if (typeof condition === 'function') {
+          error.message = error.message + ' | ' + condition.toString().replace(/ {2}/g, '').replace(/\n/g, ' ');
         }
 
-        console.warn(chalk.gray(error.message));
+        Logger.warn(chalk.gray(error.message));
 
         return null;
       });
   }
 
   public async getWindowSize(): Promise<IRectangle> {
-    return this.driver.manage().window().getRect()
+    return this.driver.manage().window().getRect();
   }
 
   public async setWindowSize(width: number, height: number): Promise<void> {
-    console.warn(chalk.cyan(`Changing window\'s size to ${width}x${height}`));
+    Logger.warn(chalk.cyan(`Changing window\'s size to ${width}x${height}`));
     await this.driver.manage().window().setRect({ width: width, height: height });
     await this.wait(async () => (await this.driver.manage().window().getRect()).width === width);
-    console.warn(chalk.cyan(`Window\'s size changed to ${width}x${height}`));
+    Logger.warn(chalk.cyan(`Window\'s size changed to ${width}x${height}`));
   }
 
   public async getHomeUrl(): Promise<string> {
-    const homeUrl: string = await this.driver.executeScript("return document.location.origin;");
-
-    return homeUrl;
+    return this.driver.executeScript('return document.location.origin;');
   }
 
   public async getAccessTokenStorage(): Promise<string> {
-    const token: IWebDriverOptionsCookie = await this.driver.executeScript("window.localStorage.getItem('pe_auth_token');");
+    const token: IWebDriverOptionsCookie = 
+    await this.driver.executeScript("window.localStorage.getItem('pe_auth_token');");
 
     return token ? token.value : null;
   }
 
   public async getLocalStorage(item: string): Promise<string> {
-    const itemValue: any = await this.driver.executeScript(`window.localStorage.getItem('${item}');`);
-
-    return itemValue;
+    return this.driver.executeScript(`window.localStorage.getItem('${item}');`);
   }
 
   public async getUserAgent(): Promise<string> {
@@ -153,46 +164,45 @@ export class Browser {
   }
 
   public async isDocumentReady(): Promise<boolean> {
-    return await this.driver.executeScript("return document.readyState;") === "complete";
+    return await this.driver.executeScript('return document.readyState;') === 'complete';
   }
 
   public async close(): Promise<void> {
-    console.warn(chalk.gray('================================================================================'));
+    Logger.warn(chalk.gray('================================================================================'));
 
     await this.driver.quit();
   }
 
   public async closeTab(): Promise<void> {
-    console.warn(chalk.yellow('================================================================================'));
+    Logger.warn(chalk.yellow('================================================================================'));
 
     await (await this.driver).close();
   }
 
   public async openInNewTab(urlButton: WebComponent): Promise<void> {
-  console.warn(chalk.cyan(`Opening in new tab:`));
-    const lastTabsCount: number = (await ((await this.getDriver()).getAllWindowHandles())).length;
-    await urlButton.click();
-    await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length > lastTabsCount);
-    const tabs: Promise<string[]> = (await this.getDriver()).getAllWindowHandles();
-    (await this.getDriver()).switchTo().window((await tabs)[lastTabsCount]);
-    await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length === 0, 3000);
+  Logger.warn(chalk.cyan(`Opening in new tab:`));
+  const lastTabsCount: number = (await ((await this.getDriver()).getAllWindowHandles())).length;
+  await urlButton.click();
+  await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length > lastTabsCount);
+  const tabs: Promise<string[]> = (await this.getDriver()).getAllWindowHandles();
+  await (await this.getDriver()).switchTo().window((await tabs)[lastTabsCount]);
+  await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length === 0, 3000);
   }
 
   public async openInNewTabLink(link: string): Promise<void> {
-  console.warn(chalk.cyan(`Opening in new tab:`));
-    const lastTabsCount: number = (await ((await this.getDriver()).getAllWindowHandles())).length;
-    // await urlButton.click();
-    await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length > lastTabsCount);
-    const tabs: Promise<string[]> = (await this.getDriver()).getAllWindowHandles();
-    (await this.getDriver()).switchTo().window((await tabs)[lastTabsCount]);
-    await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length === 0, 3000);
+  Logger.warn(chalk.cyan(`Opening in new tab:`));
+  const lastTabsCount: number = (await ((await this.getDriver()).getAllWindowHandles())).length;
+  await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length > lastTabsCount);
+  const tabs: Promise<string[]> = (await this.getDriver()).getAllWindowHandles();
+  await (await this.getDriver()).switchTo().window((await tabs)[lastTabsCount]);
+  await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length === 0, 3000);
   }
 
   public async closeLastTab(waitTime: number = 3000): Promise<void> {
     await this.closeTab();
     await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length !== 1, 2000);
     const tabs: Promise<string[]> = (await this.getDriver()).getAllWindowHandles();
-    (await this.getDriver()).switchTo().window((await tabs)[(await tabs).length - 1]);
+    await (await this.getDriver()).switchTo().window((await tabs)[(await tabs).length - 1]);
     await this.wait(async () => (await (await this.getDriver()).getAllWindowHandles()).length === 1, 2000);
   }
 
@@ -205,14 +215,14 @@ export class Browser {
 
       const fileName: string = slugify(`${prefix}${new Date().toISOString()}.png`, { lower: true });
       name = fileName;
-      const base64Data: string = data.replace(/^data:image\/png;base64,/, "");
+      const base64Data: string = data.replace(/^data:image\/png;base64,/, '');
 
       await promises.mkdir(resolve(environment.screenshotSavePath), { recursive: true });
 
-      console.warn(chalk.yellowBright(`Screenshot taken: ` + resolve(environment.screenshotSavePath, fileName)));
+      Logger.warn(chalk.yellowBright(`Screenshot taken: ` + resolve(environment.screenshotSavePath, fileName)));
       writeFile(resolve(environment.screenshotSavePath, fileName), base64Data, 'base64', (err: Error) => {
         if (err) {
-          console.warn(err);
+          Logger.warn(err);
         }
       });
     });
@@ -220,21 +230,21 @@ export class Browser {
     return name;
   }
 
-  public async checkEnvironments(): Promise<void>{
+  public async checkEnvironments(): Promise<void> {
     await this.wait(async () => environment.propertiesLoaded, 10000);
     if (!environment.propertiesLoaded) {
-      throw new Error("Unable to load environment properties");
+      throw new Error('Unable to load environment properties');
     }
   }
 
-  public async getKeyCtrl(): Promise<string>{
-    const keyCtrl: string = ((await this.getUserAgent()).includes('Macintosh;')) ? Key.COMMAND : Key.CONTROL;
-    
-    return keyCtrl;
+  public async getKeyCtrl(): Promise<string> {
+    return ((await this.getUserAgent()).includes('Macintosh;')) ? Key.COMMAND : Key.CONTROL;
   }
 
   public async setLanguage(language: string = 'en'): Promise<void> {
-    const languageCode: string = (language === businesses.DE || language === businesses.AT) ? businesses.DE.toLowerCase() : 'en';
+    const languageCode: string = 
+    (language === businesses.DE || language === businesses.AT) ? businesses.DE.toLowerCase() : 'en';
+
     await this.driver.executeScript(`window.localStorage.setItem('pe_current_locale', '${languageCode}');`);
     await this.driver.navigate().refresh();
   }
@@ -255,6 +265,7 @@ export class Browser {
         return new Builder().forBrowser('firefox').build();
       case 'safari':
         const driver: ThenableWebDriver = new Builder().forBrowser('safari').build();
+        // tslint:disable: no-floating-promises
         driver.manage().window().maximize().then();
 
         return driver;
@@ -263,7 +274,7 @@ export class Browser {
       case 'edge':
         return new Builder().forBrowser('edge').build();
       default:
-        throw Error('Unsupported browser. Please choose one from chrome, firefox, safari, ie and edge')
+        throw Error('Unsupported browser. Please choose one from chrome, firefox, safari, ie and edge');
     }
   }
 }
