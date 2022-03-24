@@ -2,21 +2,20 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
-import { Browser } from '../src/core';
-import { LoginPage } from '../src/pages/main';
+import { Registration } from '../../src/pages/main/register';
+import { Browser } from '../../src/core';
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-describe('Test', async () => {
-
-  let loginPage: LoginPage;
+describe('LetsKamp', async () => {
+  let register: Registration;
   let browser: Browser;
   
   before(async () => {
     browser = new Browser();
-    loginPage = new LoginPage(browser);
+    register = new Registration(browser);
     
   });
 
@@ -24,8 +23,7 @@ describe('Test', async () => {
     await browser.close();
   });
 
-  it('1. Test', async () => {
-    await loginPage.signIn();
-    expect(true).to.be.true;
-  });
+  it('1. Open Register Page', async () => {
+    await register.navigate();
+  })
 });

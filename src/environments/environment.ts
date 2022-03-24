@@ -5,7 +5,7 @@ dotenv.config();
 const env: ProcessEnv = process.env;
 
 if (
-  !env.SITE_URL
+  !env.BUSINESS_SITE_URL
 ) {
   throw Error('You need to set env variables. Make sure you have a .env file');
 }
@@ -14,7 +14,8 @@ export const environment: any = {
   browser: env.SELENIUM_BROWSER,
   defaultUserEmail: env.DEFAULT_USER_EMAIL,
   defaultUserPass: env.DEFAULT_USER_PASS,
-  siteUrl: env.SITE_URL,
+  businessSiteUrl: env.BUSINESS_SITE_URL,
+  mainSiteUrl: env.MAIN_SITE_URL,
 };
 
 export const businesses: any = {

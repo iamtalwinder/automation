@@ -57,7 +57,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   public async clickAndWaitStaleness(waitTime: number = 3000): Promise<void> {
     return this.execute('CLICK AND WAIT STALENESS', async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());
-      await this.driver.actions().click(element).perform();
+      await element.click();
       await this.browser.wait(until.stalenessOf(element), waitTime);
     },                  async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());

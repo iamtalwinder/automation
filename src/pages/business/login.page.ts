@@ -11,24 +11,23 @@ export class LoginPage extends AbstractPage {
   @find(By.css("form mat-form-field input[type='password']"))
   public Password: WebComponent;
 
-  @find(By.css('form button'))
+  @find(By.css("form mat-error"))
+  public ErrorMessageLabel: WebComponent;
+
+  @find(By.css("form button"))
   public Login: WebComponent;
 
   constructor(browser: Browser) {
     super(browser);
-    this.setUrl(environment.siteUrl + '/login');
+    this.setUrl(environment.businessSiteUrl + '/login');
   }
 
   public async signIn(
     email: string = environment.defaultUserEmail,
     password: string = environment.defaultUserPass,
+    checkStaleness: boolean = true
   ): Promise<void> {
     await this.navigate();
-
-    if ((!email || !password) && email !== '' && password !== '') {
-      email = environment.defaultUserEmail;
-      password = environment.defaultUserPass;
-    }
 
     if (!await this.Email.isLocated(30000)) {
       await this.navigate();
@@ -36,7 +35,13 @@ export class LoginPage extends AbstractPage {
 
     await this.Email.sendKeys(email);
     await this.Password.sendKeys(password);
-    await this.Login.clickAndWaitStaleness();
+    if (checkStaleness) {
+      await this.Login.clickAndWaitStaleness();
+    } else {
+      await this.Login.click();
+    }
   }
+
+  
 
 }

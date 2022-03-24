@@ -36,6 +36,10 @@ export class Browser {
     Logger.warn(chalk.cyan(url));
   }
 
+  public async getCurrentUrl(): Promise<string> {
+    return this.driver.getCurrentUrl();
+  }
+
   public async clearStoredUrls(): Promise<void> {
     this.storedUrls = new Map<string, string>();
   }
