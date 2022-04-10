@@ -4,7 +4,7 @@ import 'mocha';
 import * as sinonChai from 'sinon-chai';
 import { Browser } from '../../src/core';
 import { LoginPage } from '../../src/pages/business';
-import { LocationsPage } from '../../src/pages/business';
+import { LocationsPage } from '../../src/pages/business/locations';
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(sinonChai);
@@ -27,16 +27,20 @@ describe('Business Login', async () => {
     await browser.close();
   });
 
-  // it("1. Login Unsuccessful -- Wrong email or password", async () =>{
-  //   await loginPage.signIn("wrong@gmail.com", "1233987", false);
-  //   const errorMessage: string = await loginPage.ErrorMessageLabel.getText(true);
-  //   expect(errorMessage).to.equals("No customer account found");
-  // });
+  it('1. Login Unsuccessful -- Wrong email or password', async () => {
+    await loginPage.signIn('wrong@gmail.com', '1233987', false);
+    const errorMessage: string = await loginPage.ErrorMessageLabel.getText(true);
+    expect(errorMessage).to.equals('No customer account found');
+  });
 
   it('2. Business Login Success', async () => {
     await loginPage.signIn();
-    const loginUrl =  await browser.getCurrentUrl();
-    const locationspageUrl = await locationPage.getPageUrl();
+    const loginUrl: string =  await browser.getCurrentUrl();
+    const locationspageUrl: string = locationPage.getPageUrl();
     expect(loginUrl).to.equals(locationspageUrl);
   });
+
+  // it('3. Click on Add Locations',async () => {
+  //   await locationPage.addLocations();
+  // })
 });

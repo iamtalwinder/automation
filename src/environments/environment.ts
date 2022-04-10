@@ -14,89 +14,24 @@ export const environment: any = {
   browser: env.SELENIUM_BROWSER,
   defaultUserEmail: env.DEFAULT_USER_EMAIL,
   defaultUserPass: env.DEFAULT_USER_PASS,
+  newuserfirstname: env.NEW_USER_FIRST_NAME,
+  newuserlastname: env.NEW_USER_LAST_NAME,
+  newuseremail: env.NEW_USER_EMAIL,
+  newuserpassword: env.NEW_USER_PASSWORD,
+  newuserconfirmpassword: env.NEW_USER_CONFIRM_PASSWORD,
   businessSiteUrl: env.BUSINESS_SITE_URL,
   mainSiteUrl: env.MAIN_SITE_URL,
+  locationName: env.LOCATION_NAME,
+  address: env.ADDRESS,
+  city: env.CITY,
+  state: env.STATE,
+  zip: env.ZIP,
+  phoneNumber: env.PHONE_NUMBER,
 };
 
 export const businesses: any = {
   CURRENT: 'current',
 };
-
-export const cssValues: any = {
-};
-
-export const contextMenu: any = {
-};
-
-export const attributes: any = {
-};
-
-export const statuses: any = {
-};
-
-export const paymentTypes: any = {
-};
-
-export const gridWidget: any = {
-};
-
-export const classes: any = {
-};
-
-export const shapeWidget: any = {
-};
-
-export const textWidget: any = {
-};
-
-export const cosWidgets: any = {
-};
-
-export const cosApps: any = {
-};
-
-export const textDataLinks: any = {
-};
-
-export const shapeDataLinks: any = {
-};
-
-export const gridDataLinks: any = {
-};
-
-export const widgetData: any = {
-};
-
-export const desktopDefaultItems: any = {
-};
-
-export const tabletDefaultItems: any = {
-};
-
-export const mobileDefaultItems: any = {
-};
-
-export const settingsEmployee: any = {
-};
-
-export const dataLinkAttributes: any = {
-};
-
-export const domains: any = {
-};
-
-export const pages: any = {
-};
-
-export const pubData: any = {
-};
-
-export const colors: any = {
-};
-
-export const languages: any = {
-};
-
 export const ssns: any = {
   NoBulk: '',
 };

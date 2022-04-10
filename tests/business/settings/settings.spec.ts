@@ -3,8 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
 import { Browser } from '../../../src/core';
-import { SettingsPage } from '../../../src/pages/business/settings';
-import { ChangeSubscriptionPage } from '../../../src/pages/business/settings';
+import { SettingsPage, ChangeSubscriptionPage } from '../../../src/pages/business/settings';
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(sinonChai);
@@ -27,12 +26,12 @@ describe('Business Settings', async () => {
     await browser.close();
   });
 
-  it("1. Navigate to change subscripiton", async () =>{
+  it('1. Navigate to change subscripiton', async () => {
     await settingsPage.openSettingsPage();
-    // await settingsPage.ChangeSubscriptionLink.clickAndWaitStaleness();
-    // const currentUrl =  await browser.getCurrentUrl();
-    // const changeSubscriptionUrl = await changeSubscriptionPage.getPageUrl()
-    // expect(currentUrl).to.equals(changeSubscriptionUrl);
+    await settingsPage.ChangeSubscriptionLink.clickAndWaitStaleness();
+    const currentUrl: string =  await browser.getCurrentUrl();
+    const changeSubscriptionUrl: string = changeSubscriptionPage.getPageUrl();
+    expect(currentUrl).to.equals(changeSubscriptionUrl);
   });
 
 });

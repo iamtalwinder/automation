@@ -13,6 +13,7 @@ import {
   IRectangle, 
   IWebDriverOptionsCookie, 
   ThenableWebDriver,
+  Actions,
 } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 import slugify from 'slugify';

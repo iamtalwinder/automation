@@ -7,22 +7,21 @@ import { By } from 'selenium-webdriver';
 
 export class SettingsPage extends AbstractPage {
 
-  @find(By.css("fuse-navbar-vertical fuse-nav-vertical-item:nth-child(2) a"))
+  @find(By.css('fuse-navbar-vertical fuse-nav-vertical-item:nth-child(2) a'))
   public SettingsMenu: WebComponent;
 
-  @find(By.css("setting-plan-details > div:nth-child(2) > div"))
+  @find(By.css('setting-plan-details > div:nth-child(2) > div'))
   public ChangeSubscriptionLink: WebComponent;
 
-  loginPage: LoginPage;
+  private loginPage: LoginPage;
 
   constructor(browser: Browser) {
     super(browser);
     this.loginPage = new LoginPage(browser);
-
     this.setUrl(environment.businessSiteUrl + '/settings');
   }
 
-  public async openSettingsPage() {
+  public async openSettingsPage(): Promise<void> {
     await this.loginPage.signIn();
     await this.SettingsMenu.click();
   }
