@@ -410,14 +410,6 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     return elements.length;
   }
 
-  // public async checkCheckbox(): Promise<void> {
-  //   return this.execute('GET POSITION', async (element: WebElement) => {
-  //     if (!element.isChecked()) {
-  //       await element.click();
-  //       await element.isChecked();
-  //     }
-  //   });
-  // }
 
   public abstract getElement(): Promise<WebElement>;
 

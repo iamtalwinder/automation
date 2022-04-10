@@ -1,6 +1,6 @@
 {
   "spec": [
-    "./tests/business/locations/locations.spec.ts"
+    "./tests/business/**"
     
   ],
   "retries": 0

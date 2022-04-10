@@ -17,7 +17,7 @@ import {
 } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 import slugify from 'slugify';
-import { businesses, environment } from '../environments';
+import { environment } from '../environments';
 import { Logger } from '../services';
 import { ShadowWebComponent, WebComponent } from '../web-components';
 
@@ -235,23 +235,8 @@ export class Browser {
     return name;
   }
 
-  public async checkEnvironments(): Promise<void> {
-    await this.wait(async () => environment.propertiesLoaded, 10000);
-    if (!environment.propertiesLoaded) {
-      throw new Error('Unable to load environment properties');
-    }
-  }
-
   public async getKeyCtrl(): Promise<string> {
     return ((await this.getUserAgent()).includes('Macintosh;')) ? Key.COMMAND : Key.CONTROL;
-  }
-
-  public async setLanguage(language: string = 'en'): Promise<void> {
-    const languageCode: string = 
-    (language === businesses.DE || language === businesses.AT) ? businesses.DE.toLowerCase() : 'en';
-
-    await this.driver.executeScript(`window.localStorage.setItem('pe_current_locale', '${languageCode}');`);
-    await this.driver.navigate().refresh();
   }
 
   private static createBrowser(browser: string): ThenableWebDriver {
@@ -259,10 +244,6 @@ export class Browser {
       case 'chrome':
         const options: Options = new Options();
         options.addArguments('--incognito', `--window-size=${environment.screen}`, '--disable-dev-shm-usage');
-        // options.addArguments(`user-agent=${environment.userAgent}`);
-        // compatibility mode in case of issue
-        // options.addArguments('--incognito', '--headless', '--window-size=1280,1400', '--no-sandbox',
-        //   '--enable-features=NetworkService,NetworkServiceInProcess', '--disable-features=VizDisplayCompositor');
 
         return new Builder().forBrowser('chrome').setChromeOptions(options).build();
       case 'firefox':

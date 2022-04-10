@@ -31,11 +31,9 @@ export class LocationsPage extends AbstractPage {
 
   @find(By.xpath('//*[text() = " Add Stage "]'))
   public AddStage: WebComponent;
- 
 
   @find(By.xpath('//*[text() = "Buy Plan"]'))
   public BuyPlan: WebComponent;
- 
 
   @find(By.xpath('//*[text() = " Location Name is required "]'))
   public LocationNameRequired: WebComponent;
@@ -76,6 +74,7 @@ export class LocationsPage extends AbstractPage {
       await this.CloseIcon.click();
     }
 
+    await this.AddLocationsBox.scrollIntoView();
     await this.AddLocationsBox.click();
 
     await this.LocationNameInput.sendKeys(locationName);    

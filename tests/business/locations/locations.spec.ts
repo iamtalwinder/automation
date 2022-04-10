@@ -33,19 +33,19 @@ describe('Business Locations', async () => {
 
   });
 
-  it('1.1 Should highlight required fields when they’re not filled in', async () => {
-    await locationsPage.addLocation();
-    await browser.wait(async () => await locationsPage.LocationNameRequired.isLocated() === true);
-    expect(await locationsPage.LocationNameRequired.isLocated()).to.be.true;
-    await browser.wait(async () => await locationsPage.AddressNameRequired.isLocated() === true);
-    expect(await locationsPage.AddressNameRequired.isLocated()).to.be.true;
-    await browser.wait(async () => await locationsPage.CityNameRequired.isLocated() === true);
-    expect(await locationsPage.CityNameRequired.isLocated()).to.be.true;
-    await browser.wait(async () => await locationsPage.ZipRequired.isLocated() === true);
-    expect(await locationsPage.ZipRequired.isLocated()).to.be.true;    
-    await browser.wait(async () => await locationsPage.PhoneNumberRequired.isLocated() === true);
-    expect(await locationsPage.PhoneNumberRequired.isLocated()).to.be.true;    
-    await locationsPage.AddStage.click();
+  // it('1.1 Should highlight required fields when they’re not filled in', async () => {
+  //   await locationsPage.addLocation();
+  //   await browser.wait(async () => await locationsPage.LocationNameRequired.isLocated() === true);
+  //   expect(await locationsPage.LocationNameRequired.isLocated()).to.be.true;
+  //   await browser.wait(async () => await locationsPage.AddressNameRequired.isLocated() === true);
+  //   expect(await locationsPage.AddressNameRequired.isLocated()).to.be.true;
+  //   await browser.wait(async () => await locationsPage.CityNameRequired.isLocated() === true);
+  //   expect(await locationsPage.CityNameRequired.isLocated()).to.be.true;
+  //   await browser.wait(async () => await locationsPage.ZipRequired.isLocated() === true);
+  //   expect(await locationsPage.ZipRequired.isLocated()).to.be.true;    
+  //   await browser.wait(async () => await locationsPage.PhoneNumberRequired.isLocated() === true);
+  //   expect(await locationsPage.PhoneNumberRequired.isLocated()).to.be.true;    
+  //   await locationsPage.AddStage.click();
 
-  });
+  // });
 });

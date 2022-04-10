@@ -29,8 +29,7 @@ describe('Business Login', async () => {
 
   it('1. Login Unsuccessful -- Wrong email or password', async () => {
     await loginPage.signIn('wrong@gmail.com', '1233987', false);
-    const errorMessage: string = await loginPage.ErrorMessageLabel.getText(true);
-    expect(errorMessage).to.equals('No customer account found');
+    expect(await loginPage.NoCustomerFoundLabel.isLocated()).to.be.true;
   });
 
   it('2. Business Login Success', async () => {
@@ -39,8 +38,4 @@ describe('Business Login', async () => {
     const locationspageUrl: string = locationPage.getPageUrl();
     expect(loginUrl).to.equals(locationspageUrl);
   });
-
-  // it('3. Click on Add Locations',async () => {
-  //   await locationPage.addLocations();
-  // })
 });

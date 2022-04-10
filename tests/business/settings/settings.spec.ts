@@ -26,12 +26,12 @@ describe('Business Settings', async () => {
     await browser.close();
   });
 
-  it('1. Navigate to change subscripiton', async () => {
-    await settingsPage.openSettingsPage();
-    await settingsPage.ChangeSubscriptionLink.clickAndWaitStaleness();
-    const currentUrl: string =  await browser.getCurrentUrl();
-    const changeSubscriptionUrl: string = changeSubscriptionPage.getPageUrl();
-    expect(currentUrl).to.equals(changeSubscriptionUrl);
-  });
+  // it('1. Navigate to change subscripiton', async () => {
+  //   await settingsPage.openSettingsPage();
+  //   await settingsPage.ChangeSubscriptionLink.clickAndWaitStaleness();
+  //   const currentUrl: string =  await browser.getCurrentUrl();
+  //   const changeSubscriptionUrl: string = changeSubscriptionPage.getPageUrl();
+  //   expect(currentUrl).to.equals(changeSubscriptionUrl);
+  // });
 
 });

@@ -11,8 +11,8 @@ export class LoginPage extends AbstractPage {
   @find(By.css('form mat-form-field input[type="password"]'))
   public Password: WebComponent;
 
-  @find(By.css('form mat-error'))
-  public ErrorMessageLabel: WebComponent;
+  @find(By.xpath('//*[text() = "No customer account found"]'))
+  public NoCustomerFoundLabel: WebComponent;
 
   @find(By.css('form button'))
   public Login: WebComponent;
