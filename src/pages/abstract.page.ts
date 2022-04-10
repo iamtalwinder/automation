@@ -10,6 +10,10 @@ export abstract class AbstractPage {
     await this.browser.navigate(this.url);
   }
 
+  public getPageUrl(): string {
+    return this.url;
+  }
+  
   protected setUrl(url: string): void {
     this.url = url;
   }

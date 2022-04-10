@@ -3,7 +3,7 @@ import { WebComponentInterface } from './web-component.interface';
 import { Browser } from '../core';
 import * as chalk from 'chalk';
 import { IDirection, Key, Button } from 'selenium-webdriver/lib/input';
-import { environment, attributes } from '../environments';
+import { environment } from '../environments';
 import { Logger } from '../services';
 
 export abstract class AbstractWebComponent implements WebComponentInterface {
@@ -57,7 +57,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
   public async clickAndWaitStaleness(waitTime: number = 3000): Promise<void> {
     return this.execute('CLICK AND WAIT STALENESS', async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());
-      await this.driver.actions().click(element).perform();
+      await element.click();
       await this.browser.wait(until.stalenessOf(element), waitTime);
     },                  async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());
@@ -382,12 +382,6 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     });
   }
 
-  public async isChecked(): Promise<boolean> {
-    return this.execute(`IS CHECKED`, async (element: WebElement) => {
-      return element.getAttribute(attributes.CHECKED);
-    });
-  }
-
   public async switchToIframe(): Promise<void> {
     return this.execute(`SWITCH TO IFRAME`, async (element: WebElement) => {
       await this.browser.wait(async () => element.isDisplayed());
@@ -416,14 +410,6 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     return elements.length;
   }
 
-  // public async checkCheckbox(): Promise<void> {
-  //   return this.execute('GET POSITION', async (element: WebElement) => {
-  //     if (!element.isChecked()) {
-  //       await element.click();
-  //       await element.isChecked();
-  //     }
-  //   });
-  // }
 
   public abstract getElement(): Promise<WebElement>;
 
@@ -451,25 +437,6 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
       return result;
     } catch (e) {
       Logger.warn(`${actionName} |`, chalk.gray(this.locator.toString()));
-
-      if (e.name === 'ElementClickInterceptedError' || e.name === 'ElementNotInteractableError') {
-
-        return this.execute(
-          `SCRIPT ERROR ${actionName} ${e}`,
-          scriptAction as (element: WebElement) => Promise<any>, scriptAction,
-        );
-      }
-
-      if (e.name === 'StaleElementReferenceError' || e.name === 'InvalidElementStateError') {
-        await this.driver.sleep(100);
-        Logger.warn(chalk.gray(e.name), chalk.gray('Repeat after 100ms'));
-
-        return this.execute(actionName, action, scriptAction);
-      }
-
-      Logger.warn(chalk.redBright(e.name));
-      Logger.warn(chalk.redBright(e.message));
-      await this.browser.takeScreenshot(actionName);
 
       throw e;
     } 
