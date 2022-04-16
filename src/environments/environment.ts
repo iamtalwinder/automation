@@ -21,5 +21,5 @@ export const environment: any = {
   phoneNumber: env.PHONE_NUMBER,
 };
 export const attributes: any = {
-}
+};
 

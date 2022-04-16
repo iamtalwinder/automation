@@ -3,21 +3,24 @@ import { By, Key } from 'selenium-webdriver';
 import { Browser, find } from '../../../../core';
 import { environment } from '../../../../environments';
 import { WebComponent } from '../../../../web-components';
-export class AddCampPage extends AbstractPage { 
+import { LocationDetailPage } from '../location-details.page';
+import { LocationsPage } from '../locations.page';
 
-  @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-location-tab/div/div[1]/div[1]/div[2]/div[1]/button'))
-  public AddCampButton: WebComponent;
+export class AddCampPage extends AbstractPage { 
 
   @find(By.xpath('//input[@formcontrolname="name"]'))
   public CampName: WebComponent;
  
-  @find(By.xpath('//input[@formcontrolname="categoryIds"]'))
-  public CategoryName: WebComponent;
+  @find(By.id('mat-select-1'))
+  public CategoryNameDropDown: WebComponent;
 
-  @find(By.xpath('//input[@formcontrolname="minimumAge"]'))
+  @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-addandeditcamp/div/div[2]/form/div/div/div[4]/div/mat-form-field[1]'))
+  public MinimumAgeWrapper: WebComponent;
+
+  @find(By.id('//*[@id="wrapper"]/div[2]/fuse-content/app-addandeditcamp/div/div[2]/form/div/div/div[4]/div/mat-form-field[1]/div/div[1]/div[3]'))
   public MinimumAge: WebComponent;
  
-  @find(By.xpath('//input[@formcontrolname="maximumAge"]'))
+  @find(By.id('mat-input-44'))
   public MaximumAge: WebComponent;
  
   @find(By.xpath('//input[@formcontrolname="Description"]'))
@@ -65,14 +68,34 @@ export class AddCampPage extends AbstractPage {
   @find(By.xpath('//*[text() = "Save as Draft"]'))
   public SaveAsDraftButton: WebComponent;
 
+  private locationDetails: LocationDetailPage;
+  private locationsPage: LocationsPage;
+
   constructor(browser: Browser) {
     super(browser);
     this.setUrl(environment.businessSiteUrl + '/dashboard/locations');
+    this.locationDetails = new LocationDetailPage(browser)
+    this.locationsPage = new LocationsPage(browser);
   }
 
-  public async addCamp() {
-    console.log("add-camp-button",this.AddCampButton);
-    await this.AddCampButton.clickAndWaitStaleness(40000);
-    await this.browser.sleep(2000);
+  public async openAddCamp(locationPosition: number = 1): Promise<void> {
+    await this.locationsPage.openLocation(locationPosition);
+    await this.locationDetails.AddCampButton.click();
+    await this.browser.wait(async () => this.CampName.isLocated(), 3000);
   }
+
+  public async addCamp(
+    campName: string,
+    minimumAge: number,
+    maximumAge: number,
+  ): Promise<void> {
+
+    await this.CampName.sendKeys(campName);
+    await this.CategoryNameDropDown.click();
+    await this.CategoryNameDropDown.sendKeys(Key.ARROW_DOWN + Key.ENTER + Key.ESCAPE);
+    await this.MinimumAgeWrapper.click();
+    await this.MinimumAgeWrapper.sendKeys(Key.NUMPAD5);
+  }
+
+ 
 }

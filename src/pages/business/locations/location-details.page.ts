@@ -2,8 +2,7 @@ import { By, Key } from 'selenium-webdriver';
 import { Browser, find } from '../../../core';
 import { environment } from '../../../environments';
 import { WebComponent } from '../../../web-components';
-import { AbstractPage } from "../../abstract.page";
-import { LocationsPage } from '.';
+import { AbstractPage } from '../../abstract.page';
 
 export class LocationDetailPage extends AbstractPage { 
   
@@ -27,6 +26,12 @@ export class LocationDetailPage extends AbstractPage {
 
   @find(By.xpath('//*[@id="cdk-overlay-0"]/div/div/button[2]'))
   public ArchiveLocation: WebComponent;
+
+  @find(By.xpath('//*[@id="mat-dialog-0"]/dialog-content-example-dialog/div/div[2]/div[2]/div/button'))
+  public ArchiveLocationButton: WebComponent;
+
+  @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-location-tab/div/div[1]/div[1]/div[2]/div[1]/button'))
+  public AddCampButton: WebComponent;
   
   constructor(browser: Browser) {
     super(browser);
@@ -36,15 +41,20 @@ export class LocationDetailPage extends AbstractPage {
   public async openMenuButton() {
     await this.MenuButton.click();
     await this.browser.wait(async () => this.EditLocation.isLocated(), 3000);
-
   }
+
   public async clickEditLocationButton() {
     await this.EditLocation.click();
     await this.browser.sleep(2000);
   }
 
   public async archiveLocation() {
-    console.log("archive-location",this.ArchiveLocation);
-    await this.ArchiveLocation.click()
+    await this.ArchiveLocation.clickAndWaitStaleness();
   }
+
+  public async clickArchiveLocationButton() {
+    await this.ArchiveLocationButton.click();
+  }
+
+
 }

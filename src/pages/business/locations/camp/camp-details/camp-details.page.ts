@@ -1,3 +1,3 @@
-import { AbstractPage } from "../../../../abstract.page";
+import { AbstractPage } from '../../../../abstract.page';
 
 export class CampDetailsPage extends AbstractPage { }

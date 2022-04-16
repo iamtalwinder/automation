@@ -39,19 +39,19 @@ export class LocationsPage extends AbstractPage {
   // @find(By.xpath('//*[text() = " Location Name is required "]'))
   // public LocationNameErrorRequired: WebComponent;
  
-  @find(By.id("mat-error-25"))
+  @find(By.id('mat-error-25'))
   public AddressNameErrorRequired: WebComponent;
 
-  @find(By.id("mat-error-26"))
+  @find(By.id('mat-error-26'))
   public CityNameErrorRequired: WebComponent;
 
-  @find(By.id("mat-error-27"))
+  @find(By.id('mat-error-27'))
   public StateNameErrorRequired: WebComponent;
 
-  @find(By.id("mat-error-28"))
+  @find(By.id('mat-error-28'))
   public ZipErrorRequired: WebComponent;
  
-  @find(By.id("mat-error-29"))
+  @find(By.id('mat-error-29'))
   public PhoneNumberErrorRequired: WebComponent;
  
   @find(By.className('custom-card mb-20 w-272 h-80 mat-elevation-z5 br-4 cursorPointer ng-star-inserted'))
@@ -129,13 +129,10 @@ export class LocationsPage extends AbstractPage {
     await this.Address.sendKeys(Key.ARROW_DOWN);
     await this.Address.sendKeys(Key.ENTER);
     await this.PhoneNumber.sendKeys(editphoneNumber);
-    await this.AddStage.click();
-    const updatedLocationName: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editLocationName} "]`));
-    await this.browser.wait(async () => await updatedLocationName.isLocated(), 30000);
-    const updatedAddressName: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editAddressName} "]`));
-    await this.browser.wait(async () => await updatedAddressName.isLocated(), 30000);
-    const updatedPhoneNumber: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editphoneNumber} "]`));
-    await this.browser.wait(async () => await updatedPhoneNumber.isLocated(), 30000);
+    await this.AddStage.clickAndWaitStaleness();
+    const updatedLocationName: WebComponent = this.browser.find(By.xpath(`//*[text() = " ${editLocationName} "]`));
+    console.log(await updatedLocationName.isLocated());
+    await this.browser.wait(async () => updatedLocationName.isLocated(), 30000);
   }
 
 }

@@ -242,7 +242,7 @@ export abstract class AbstractWebComponent implements WebComponentInterface {
     });
   }
 
-  public async sendKeys(keys: string): Promise<void> {
+  public async sendKeys(keys: string | number): Promise<void> {
     return this.execute(`SEND KEYS | ${chalk.blueBright(keys)}`, async (element: WebElement) => {
       await element.sendKeys(keys);
     });
