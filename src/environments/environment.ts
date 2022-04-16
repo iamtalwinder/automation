@@ -20,3 +20,6 @@ export const environment: any = {
   address: env.ADDRESS,
   phoneNumber: env.PHONE_NUMBER,
 };
+export const attributes: any = {
+}
+

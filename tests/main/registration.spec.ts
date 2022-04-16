@@ -2,9 +2,9 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
-import { Registration } from '../../src/pages/main/register';
 import { Browser } from '../../src/core';
 import { environment } from '../../src/environments';
+import { Registration } from '../../src/pages/main/register';
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(sinonChai);

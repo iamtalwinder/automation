@@ -60,7 +60,6 @@ export class Registration extends AbstractPage {
   @find(By.xpath('//*[text() = "The password you"ve entered doesn"t match."]'))
   public PasswordMismatchError: WebComponent;
   
-
   constructor(browser: Browser) {
     super(browser);
 

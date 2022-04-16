@@ -1,8 +1,9 @@
+import { By, Key } from 'selenium-webdriver';
 import { Browser, find } from '../../../core';
-import { AbstractPage } from '../../abstract.page';
 import { environment } from '../../../environments';
 import { WebComponent } from '../../../web-components';
-import { By, Key } from 'selenium-webdriver';
+import { AbstractPage } from '../../abstract.page';
+import { LocationDetailPage } from './location-details.page';
 
 export class LocationsPage extends AbstractPage {
   @find(By.xpath('//*[text() = "Add Another Locations"]'))
@@ -35,31 +36,56 @@ export class LocationsPage extends AbstractPage {
   @find(By.xpath('//*[text() = "Buy Plan"]'))
   public BuyPlan: WebComponent;
 
-  @find(By.xpath('//*[text() = " Location Name is required "]'))
-  public LocationNameRequired: WebComponent;
+  // @find(By.xpath('//*[text() = " Location Name is required "]'))
+  // public LocationNameErrorRequired: WebComponent;
  
-  @find(By.xpath('//*[text() = " Address Name is required "]'))
-  public AddressNameRequired: WebComponent;
+  @find(By.id("mat-error-25"))
+  public AddressNameErrorRequired: WebComponent;
 
-  @find(By.xpath('//*[text() = " City Name is required "]'))
-  public CityNameRequired: WebComponent;
+  @find(By.id("mat-error-26"))
+  public CityNameErrorRequired: WebComponent;
 
-  @find(By.xpath('//*[text() = " Zip code is required "]'))
-  public ZipRequired: WebComponent;
+  @find(By.id("mat-error-27"))
+  public StateNameErrorRequired: WebComponent;
+
+  @find(By.id("mat-error-28"))
+  public ZipErrorRequired: WebComponent;
  
-  @find(By.xpath('//*[text() = " Phone Number is required "]'))
-  public PhoneNumberRequired: WebComponent;
+  @find(By.id("mat-error-29"))
+  public PhoneNumberErrorRequired: WebComponent;
  
   @find(By.className('custom-card mb-20 w-272 h-80 mat-elevation-z5 br-4 cursorPointer ng-star-inserted'))
   public AddedLocation: WebComponent;
 
+ 
+
+  private locationDetails: LocationDetailPage;
+
   constructor(browser: Browser) {
     super(browser);
     this.setUrl(environment.businessSiteUrl + '/dashboard/locations');
+
+    this.locationDetails = new LocationDetailPage(browser);
   }
 
   public async getLocationNameByPosition(position: number = 1): Promise<string> {
     return this.browser.find(By.css(`.custom-card.mb-20.w-272.h-80.mat-elevation-z5.br-4.cursorPointer.ng-star-inserted:nth-of-type(${position}) > div > div`)).getText();
+  }
+
+  public async getLocationByPosition(position: number = 1): Promise<WebComponent> {
+    return this.browser.find(By.css(`.custom-card.mb-20.w-272.h-80.mat-elevation-z5.br-4.cursorPointer.ng-star-inserted:nth-of-type(${position})`));
+  }
+
+  public async openLocationDialogBox() {
+    await this.AddLocationsBox.scrollIntoView();
+    await this.AddLocationsBox.click();
+  }
+
+  public async openLocation(position: number = 1) {
+    const location: WebComponent = await this.getLocationByPosition(position);
+    await location.scrollIntoView();
+    await location.click();
+    await this.browser.wait(async () => this.locationDetails.MenuButton.isLocated(), 3000);
   }
 
   public async addLocation(
@@ -76,7 +102,6 @@ export class LocationsPage extends AbstractPage {
 
     await this.AddLocationsBox.scrollIntoView();
     await this.AddLocationsBox.click();
-
     await this.LocationNameInput.sendKeys(locationName);    
     await this.Address.sendKeys(address);
     await this.browser.sleep(1000);
@@ -88,4 +113,29 @@ export class LocationsPage extends AbstractPage {
 
     return count + 1;
   }
+  
+  public async clearFields() {
+    await this.LocationNameInput.clear();
+    await this.Address.clear();
+    await this.PhoneNumber.clear();
+    
+  }
+
+  public async editLocation(editLocationName: string, editAddressName: string, editphoneNumber: string) {
+
+    await this.LocationNameInput.sendKeys(editLocationName);
+    await this.Address.sendKeys(editAddressName);
+    await this.browser.sleep(1000);
+    await this.Address.sendKeys(Key.ARROW_DOWN);
+    await this.Address.sendKeys(Key.ENTER);
+    await this.PhoneNumber.sendKeys(editphoneNumber);
+    await this.AddStage.click();
+    const updatedLocationName: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editLocationName} "]`));
+    await this.browser.wait(async () => await updatedLocationName.isLocated(), 30000);
+    const updatedAddressName: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editAddressName} "]`));
+    await this.browser.wait(async () => await updatedAddressName.isLocated(), 30000);
+    const updatedPhoneNumber: WebComponent = await this.browser.find(By.xpath(`//*[text() = " ${editphoneNumber} "]`));
+    await this.browser.wait(async () => await updatedPhoneNumber.isLocated(), 30000);
+  }
+
 }
