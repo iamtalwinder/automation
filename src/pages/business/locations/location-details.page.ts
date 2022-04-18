@@ -1,4 +1,5 @@
 import { By, Key } from 'selenium-webdriver';
+import { CampDetailsPage, EditCampPage } from '.';
 import { Browser, find } from '../../../core';
 import { environment } from '../../../environments';
 import { WebComponent } from '../../../web-components';
@@ -33,9 +34,18 @@ export class LocationDetailPage extends AbstractPage {
   @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-location-tab/div/div[1]/div[1]/div[2]/div[1]/button'))
   public AddCampButton: WebComponent;
   
+  @find(By.xpath('//*[@id="mat-tab-content-0-0"]/div/camp-details/div/div/div/div/div/table/tbody/tr[1]/td[1]'))
+  public AddedCamp: WebComponent;
+
+  @find(By.xpath('//*[@id="cdk-overlay-0"]/div/div/button[1]'))
+  public EditCamp: WebComponent;
+
+  private campDetailPage: CampDetailsPage;
+
   constructor(browser: Browser) {
     super(browser);
     this.setUrl(environment.businessSiteUrl + '/dashboard/locations');
+    this.campDetailPage = new CampDetailsPage(browser);
   }
  
   public async openMenuButton() {
@@ -56,5 +66,9 @@ export class LocationDetailPage extends AbstractPage {
     await this.ArchiveLocationButton.click();
   }
 
+  public async openCampDetails() {
+    await this.AddedCamp.click();
+    await this.browser.wait(async () => this.campDetailPage.MenuButton.isLocated(), 3000);
+  }
 
 }

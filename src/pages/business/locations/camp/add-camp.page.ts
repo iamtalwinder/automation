@@ -17,34 +17,37 @@ export class AddCampPage extends AbstractPage {
   @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-addandeditcamp/div/div[2]/form/div/div/div[4]/div/mat-form-field[1]'))
   public MinimumAgeWrapper: WebComponent;
 
-  @find(By.id('//*[@id="wrapper"]/div[2]/fuse-content/app-addandeditcamp/div/div[2]/form/div/div/div[4]/div/mat-form-field[1]/div/div[1]/div[3]'))
+  @find(By.id('mat-input-3'))
   public MinimumAge: WebComponent;
- 
-  @find(By.id('mat-input-44'))
+
+  @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-addandeditcamp/div/div[2]/form/div/div/div[4]/div/mat-form-field[2]'))
+  public MaximumAgeWrapper: WebComponent;
+
+  @find(By.id('mat-input-4'))
   public MaximumAge: WebComponent;
  
-  @find(By.xpath('//input[@formcontrolname="Description"]'))
+  @find(By.id('description'))
   public Description: WebComponent;
 
-  @find(By.id('mat-checkbox-1-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-1"]'))
   public Monday: WebComponent;
 
-  @find(By.id('mat-checkbox-2-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-2"]'))
   public Tuesday: WebComponent;
 
-  @find(By.id('mat-checkbox-3-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-3"]'))
   public Wednesday: WebComponent;
 
-  @find(By.id('mat-checkbox-4-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-4"]'))
   public Thursday: WebComponent;
 
-  @find(By.id('mat-checkbox-5-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-5"]'))
   public Friday: WebComponent;
 
-  @find(By.id('mat-checkbox-6-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-6"]'))
   public Saturday: WebComponent;
 
-  @find(By.id('mat-checkbox-7-input'))
+  @find(By.xpath('//*[@id="mat-checkbox-7"]'))
   public Sunday: WebComponent;
 
   @find(By.id('dropOffTime'))
@@ -68,6 +71,7 @@ export class AddCampPage extends AbstractPage {
   @find(By.xpath('//*[text() = "Save as Draft"]'))
   public SaveAsDraftButton: WebComponent;
 
+  
   private locationDetails: LocationDetailPage;
   private locationsPage: LocationsPage;
 
@@ -94,7 +98,31 @@ export class AddCampPage extends AbstractPage {
     await this.CategoryNameDropDown.click();
     await this.CategoryNameDropDown.sendKeys(Key.ARROW_DOWN + Key.ENTER + Key.ESCAPE);
     await this.MinimumAgeWrapper.click();
-    await this.MinimumAgeWrapper.sendKeys(Key.NUMPAD5);
+    await this.MinimumAge.sendKeys(5);
+    await this.MaximumAgeWrapper.click();
+    await this.MaximumAge.sendKeys(15);
+    // await this.Description.scrollIntoView();
+    await this.Description.sendKeys('This is our camp description.');
+    await this.Monday.scrollIntoView();
+    await this.Monday.click();
+    await this.Tuesday.scrollIntoView();
+    await this.Tuesday.click();
+    await this.Wednesday.scrollIntoView();
+    await this.Wednesday.click();
+    await this.Thursday.click();
+    await this.DropOffTime.click();
+    await this.DropOffTime.sendKeys('12:20:30PM');
+    await this.PickUpTime.click();
+    await this.PickUpTime.sendKeys('1:30:30PM');
+    await this.AfterCare.scrollIntoView();
+    await this.AfterCare.click();
+    await this.AfterCare.sendKeys(120);
+    await this.TermsAndConditions.click();
+    await this.TermsAndConditions.sendKeys('These are our Terms and conditions .You have to accept all these Terms and conditions.');
+    // await this.UploadFilesButton.click();
+    await this.PublishButton.click();
+
+    
   }
 
  

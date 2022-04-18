@@ -51,8 +51,6 @@ describe('Business Locations', async () => {
     await locationsPage.editLocation(editLocationName, editAddressName, editphoneNumber);
 
     expect(await locationDetailPage.LocationName.getText()).to.equal(editLocationName);
-    //  expect(await locationDetailPage.AddressName.getText()).to.equal(editAddressName);
-    //  expect(await locationDetailPage.PhoneNumber.getText()).to.equal(editphoneNumber);
   });
 
   it('3. Archive location', async () => {
@@ -63,6 +61,7 @@ describe('Business Locations', async () => {
     await browser.sleep(3000);
   });
 
+ 
   
   // it('4. Add Camp Successfully', async () => { 
   //   // const count: number = await locationsPage.addLocation(locationName);

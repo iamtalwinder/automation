@@ -131,7 +131,6 @@ export class LocationsPage extends AbstractPage {
     await this.PhoneNumber.sendKeys(editphoneNumber);
     await this.AddStage.clickAndWaitStaleness();
     const updatedLocationName: WebComponent = this.browser.find(By.xpath(`//*[text() = " ${editLocationName} "]`));
-    console.log(await updatedLocationName.isLocated());
     await this.browser.wait(async () => updatedLocationName.isLocated(), 30000);
   }
 
