@@ -4,11 +4,14 @@ import 'mocha';
 import * as sinonChai from 'sinon-chai';
 import { Browser } from '../../../src/core';
 import { LoginPage } from '../../../src/pages/business';
+import { WebComponent } from '../../../src/web-components';
 import { LocationDetailPage, LocationsPage, AddCampPage, EditCampPage, CampDetailsPage } from '../../../src/pages/business/locations';
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
+
+const campName: string = 'Z' + new Date().getTime();
 
 describe('Location Camps', async () => {
   let locationsPage: LocationsPage;
@@ -34,22 +37,25 @@ describe('Location Camps', async () => {
     await browser.close();
   });
 
-  it('1. Add Camp', async () => {
+  it('1. Add Camp successfully', async () => {
     await addCampPage.openAddCamp();
-    await addCampPage.addCamp('test', 5, 10);
-    await browser.sleep(3000);
+    await addCampPage.addCamp(campName, 5, 10);
+    const camp: WebComponent = await campDetailsPage.getCampByName(campName);
+    expect(await camp.isLocated()).to.be.true;
   });
 
   it('2. Open a Camp details ', async () => {
-    await locationsPage.openLocation();
-    await locationDetailPage.openCampDetails();
+
+    await locationDetailPage.openCampDetails(campName);
     await campDetailsPage.clickOnMenuButton();
   });
 
-  it('3. Edit Camp', async () => {
-    await editCampPage.clickEditCampButton();
-    await browser.sleep(3000);
+  // it('3. Edit Camp', async () => {
+  //   const editLocationName: string = 'Mohali' + new Date().getTime(); 
 
-  })
+  //   await editCampPage.clickEditCampButton();
+  //   await browser.sleep(3000);
+
+  // });
 
 });

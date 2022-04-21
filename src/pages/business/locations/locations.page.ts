@@ -72,16 +72,20 @@ export class LocationsPage extends AbstractPage {
     return this.browser.find(By.css(`.custom-card.mb-20.w-272.h-80.mat-elevation-z5.br-4.cursorPointer.ng-star-inserted:nth-of-type(${position}) > div > div`)).getText();
   }
 
+  public async getLocationByName(name: string): Promise<WebComponent> {
+    return this.browser.find(By.xpath(`//*[text() = " ${name} "]`));
+  }
+
   public async getLocationByPosition(position: number = 1): Promise<WebComponent> {
     return this.browser.find(By.css(`.custom-card.mb-20.w-272.h-80.mat-elevation-z5.br-4.cursorPointer.ng-star-inserted:nth-of-type(${position})`));
   }
 
-  public async openLocationDialogBox() {
+  public async openLocationDialogBox(): Promise<void> {
     await this.AddLocationsBox.scrollIntoView();
     await this.AddLocationsBox.click();
   }
 
-  public async openLocation(position: number = 1) {
+  public async openLocation(position: number = 1): Promise<void> {
     const location: WebComponent = await this.getLocationByPosition(position);
     await location.scrollIntoView();
     await location.click();
@@ -114,14 +118,14 @@ export class LocationsPage extends AbstractPage {
     return count + 1;
   }
   
-  public async clearFields() {
+  public async clearFields(): Promise<void> {
     await this.LocationNameInput.clear();
     await this.Address.clear();
     await this.PhoneNumber.clear();
     
   }
 
-  public async editLocation(editLocationName: string, editAddressName: string, editphoneNumber: string) {
+  public async editLocation(editLocationName: string, editAddressName: string, editphoneNumber: string): Promise<void> {
 
     await this.LocationNameInput.sendKeys(editLocationName);
     await this.Address.sendKeys(editAddressName);

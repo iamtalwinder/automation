@@ -26,5 +26,9 @@ export class CampDetailsPage extends AbstractPage {
   public async clickOnMenuButton() {
     await this.MenuButton.click();
   }
+  
+  public async getCampByName(name: string): Promise<WebComponent> {
+    return this.browser.find(By.xpath(`//*[text() = "${name}"]`));
+  }
  
  }

@@ -69,7 +69,7 @@ export class AddCampPage extends AbstractPage {
   public PublishButton: WebComponent;
 
   @find(By.xpath('//*[text() = "Save as Draft"]'))
-  public SaveAsDraftButton: WebComponent;
+  public SaveAsDraftCampButton: WebComponent;
 
   
   private locationDetails: LocationDetailPage;
@@ -89,7 +89,7 @@ export class AddCampPage extends AbstractPage {
   }
 
   public async addCamp(
-    campName: string,
+    campName: string = 'Z' + new Date().getTime(),
     minimumAge: number,
     maximumAge: number,
   ): Promise<void> {
@@ -98,10 +98,9 @@ export class AddCampPage extends AbstractPage {
     await this.CategoryNameDropDown.click();
     await this.CategoryNameDropDown.sendKeys(Key.ARROW_DOWN + Key.ENTER + Key.ESCAPE);
     await this.MinimumAgeWrapper.click();
-    await this.MinimumAge.sendKeys(5);
+    await this.MinimumAge.sendKeys(minimumAge);
     await this.MaximumAgeWrapper.click();
-    await this.MaximumAge.sendKeys(15);
-    // await this.Description.scrollIntoView();
+    await this.MaximumAge.sendKeys(maximumAge);
     await this.Description.sendKeys('This is our camp description.');
     await this.Monday.scrollIntoView();
     await this.Monday.click();
@@ -119,11 +118,22 @@ export class AddCampPage extends AbstractPage {
     await this.AfterCare.sendKeys(120);
     await this.TermsAndConditions.click();
     await this.TermsAndConditions.sendKeys('These are our Terms and conditions .You have to accept all these Terms and conditions.');
-    // await this.UploadFilesButton.click();
-    await this.PublishButton.click();
-
-    
+    await this.PublishButton.clickAndWaitStaleness();
   }
 
- 
+  public async clearCampFromFields(): Promise<void> {
+    await this.CampName.clear();
+    await this.CategoryNameDropDown.clear();
+    await this.MinimumAge.clear();
+    await this.MaximumAge.clear();
+    await this.Description.clear();
+    await this.Monday.clear();
+    await this.Tuesday.clear();
+    await this.Wednesday.clear();
+    await this.Thursday.clear();
+    await this.DropOffTime.clear();
+    await this.PickUpTime.clear();
+    await this.AfterCare.clear();
+    await this.TermsAndConditions.clear();
+  }
 }

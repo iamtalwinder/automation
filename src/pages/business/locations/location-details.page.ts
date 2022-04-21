@@ -25,11 +25,11 @@ export class LocationDetailPage extends AbstractPage {
   @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-location-tab/div/div[1]/div[1]/div[1]/div[2]/div[2]'))
   public PhoneNumber: WebComponent;
 
-  @find(By.xpath('//*[@id="cdk-overlay-0"]/div/div/button[2]'))
+  @find(By.xpath('//*[text() = "Archive"]'))
   public ArchiveLocation: WebComponent;
 
-  @find(By.xpath('//*[@id="mat-dialog-0"]/dialog-content-example-dialog/div/div[2]/div[2]/div/button'))
-  public ArchiveLocationButton: WebComponent;
+  @find(By.xpath('//*[text() = " Archive "]'))
+  public DialogBoxArchiveLocationButton: WebComponent;
 
   @find(By.xpath('//*[@id="wrapper"]/div[2]/fuse-content/app-location-tab/div/div[1]/div[1]/div[2]/div[1]/button'))
   public AddCampButton: WebComponent;
@@ -40,35 +40,39 @@ export class LocationDetailPage extends AbstractPage {
   @find(By.xpath('//*[@id="cdk-overlay-0"]/div/div/button[1]'))
   public EditCamp: WebComponent;
 
-  private campDetailPage: CampDetailsPage;
+  private campDetailsPage: CampDetailsPage;
 
   constructor(browser: Browser) {
     super(browser);
     this.setUrl(environment.businessSiteUrl + '/dashboard/locations');
-    this.campDetailPage = new CampDetailsPage(browser);
+    this.campDetailsPage = new CampDetailsPage(browser);
   }
  
-  public async openMenuButton() {
+  public async openMenuButton(): Promise<void> {
     await this.MenuButton.click();
     await this.browser.wait(async () => this.EditLocation.isLocated(), 3000);
+
   }
 
-  public async clickEditLocationButton() {
-    await this.EditLocation.click();
-    await this.browser.sleep(2000);
+  public async clickEditLocationButton(): Promise<void> {
+    await this.EditLocation.clickAndWaitStaleness();
   }
 
-  public async archiveLocation() {
+  public async openArchiveLocationDialogBox(): Promise<void> {
+    await this.MenuButton.click();
+    await this.browser.wait(async () => this.ArchiveLocation.isLocated(), 3000);
     await this.ArchiveLocation.clickAndWaitStaleness();
   }
 
-  public async clickArchiveLocationButton() {
-    await this.ArchiveLocationButton.click();
+  public async clickArchiveLocationButton(): Promise<void> {
+    await this.DialogBoxArchiveLocationButton.click();
   }
 
-  public async openCampDetails() {
-    await this.AddedCamp.click();
-    await this.browser.wait(async () => this.campDetailPage.MenuButton.isLocated(), 3000);
+  public async openCampDetails(name: string): Promise<void> {
+    const camp: WebComponent = await this.campDetailsPage.getCampByName(name);
+    await camp.scrollIntoView();
+    await camp.click();
+    await this.browser.wait(async () => this.campDetailsPage.MenuButton.isLocated(), 3000);
   }
 
 }

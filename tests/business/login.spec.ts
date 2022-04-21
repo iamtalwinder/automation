@@ -30,6 +30,7 @@ describe('Business Login', async () => {
   it('1. Login Unsuccessful -- Wrong email or password', async () => {
     await loginPage.signIn('wrong@gmail.com', '1233987', false);
     expect(await loginPage.NoCustomerFoundLabel.isLocated()).to.be.true;
+    await browser.sleep(2000);
   });
 
   it('2. Business Login Success', async () => {

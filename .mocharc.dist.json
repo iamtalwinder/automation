@@ -1,7 +1,7 @@
 {
   "spec": [
-    "./tests/business/locations/**"
-    
+    "./tests/business/locations/locations.spec.ts",
+    "./tests/business/locations/camp.spec.ts"
   ],
   "retries": 0
 }
